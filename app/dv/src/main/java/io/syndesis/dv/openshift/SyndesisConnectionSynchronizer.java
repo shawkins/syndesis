@@ -53,6 +53,7 @@ public class SyndesisConnectionSynchronizer {
         this.openshiftClient = toc;
         this.metadataService = metadataService;
         this.repositoryManager = repositoryManager;
+        LOGGER.info("  --->>> ################# CONSTRUCTOR FINISHED ################# = ");
     }
 
     /*
