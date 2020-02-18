@@ -18,6 +18,8 @@ package io.syndesis.dv.lsp;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.websocket.DeploymentException;
+
 import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageClient;
@@ -39,7 +41,7 @@ public class TeiidDdlLanguageServerRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TeiidDdlTextDocumentService.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws DeploymentException, InterruptedException {
         LOGGER.info("   --  >>>  TeiidDdlLanguageServerRunner.main()");
         List<String> arguments = Arrays.asList(args);
         if (arguments.contains(WEBSOCKET_PARAMETER)) {
@@ -47,7 +49,9 @@ public class TeiidDdlLanguageServerRunner {
             int port = extractPort(arguments);
             String hostname = extractHostname(arguments);
             String contextPath = extractContextPath(arguments);
-            new TeiidDdlWebSocketRunner().runWebSocketServer(hostname, port, contextPath);
+            try (TeiidDdlWebSocketRunner runner = new TeiidDdlWebSocketRunner(hostname, port, contextPath);) {
+                Thread.currentThread().join();
+            }
         } else {
             LOGGER.info("   --  >>>  Started Teiid LS as JAVA SERVER");
             server = new TeiidDdlLanguageServer();
@@ -89,6 +93,6 @@ public class TeiidDdlLanguageServerRunner {
                 }
             }
         }
-        return -1;
+        return 0;
     }
 }
