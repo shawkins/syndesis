@@ -17,6 +17,8 @@ package io.syndesis.dv.lsp.websocket;
 
 import java.util.Collection;
 
+import javax.websocket.server.ServerEndpoint;
+
 import org.eclipse.lsp4j.jsonrpc.Launcher.Builder;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageClientAware;
@@ -26,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import io.syndesis.dv.lsp.TeiidDdlLanguageServer;
 
-
+@ServerEndpoint(value="/teiid-ddl-language-server")
 public class TeiidDdlWebSocketEndpoint extends WebSocketEndpoint<LanguageClient> {
     private static final Logger LOGGER = LoggerFactory.getLogger(TeiidDdlWebSocketEndpoint.class);
 

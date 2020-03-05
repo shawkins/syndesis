@@ -116,6 +116,8 @@
     <!-- Common dependencies -->
     <version.springfox>2.9.2</version.springfox>
     <shrinkwrap.version>2.2.6</shrinkwrap.version>
+    
+    <version.tomcat>9.0.31</version.tomcat>
 
     <version.com.fasterxml.jackson.databind>2.9.10.1</version.com.fasterxml.jackson.databind>
     <version.com.fasterxml.jackson>2.9.10</version.com.fasterxml.jackson>
@@ -485,9 +487,23 @@
     </dependency>
     <!-- for servlet api -->
     <dependency>
-        <groupId> org.apache.tomcat.embed</groupId>
-        <artifactId>tomcat-embed-core</artifactId>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-core</artifactId>
+      <!-- 
+      see https://github.com/spring-projects/spring-framework/issues/22131 
+      -->
+      <version>${version.tomcat}</version>
     </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-websocket</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-websocket</artifactId>
+      <version>${version.tomcat}</version>
+    </dependency>
+
     <dependency>
       <groupId>io.opentracing.contrib</groupId>
       <artifactId>opentracing-spring-jaeger-web-starter</artifactId>
@@ -614,6 +630,7 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
     </dependency>
+    
   </dependencies>
 
   <reporting>

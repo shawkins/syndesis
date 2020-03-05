@@ -18,7 +18,6 @@ package io.syndesis.dv.server;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import javax.transaction.TransactionManager;
-import javax.websocket.DeploymentException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,10 +38,11 @@ import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 import org.teiid.runtime.EmbeddedConfiguration;
 
 import io.syndesis.dv.RepositoryManager;
-import io.syndesis.dv.lsp.websocket.TeiidDdlWebSocketRunner;
+import io.syndesis.dv.lsp.websocket.TeiidDdlWebSocketEndpoint;
 import io.syndesis.dv.metadata.MetadataInstance;
 import io.syndesis.dv.metadata.internal.DefaultMetadataInstance;
 import io.syndesis.dv.metadata.internal.TeiidServer;
@@ -134,15 +134,18 @@ public class DvAutoConfiguration implements ApplicationListener<ContextRefreshed
         };
     }
 
-    @Bean(destroyMethod = "close")
-    public TeiidDdlWebSocketRunner teiidDdlWebSocketRunner() throws DeploymentException {
-        return new TeiidDdlWebSocketRunner();
-    }
-
     @Override
     public AsyncTaskExecutor getAsyncExecutor() {
         ThreadPoolTaskExecutor tpte = new ThreadPoolTaskExecutor();
         tpte.initialize();
         return tpte;
     }
+
+    @Bean
+    public ServerEndpointExporter endpointExporter() {
+        ServerEndpointExporter endpointExporter = new ServerEndpointExporter();
+        endpointExporter.setAnnotatedEndpointClasses(TeiidDdlWebSocketEndpoint.class);
+        return endpointExporter;
+    }
+
 }
