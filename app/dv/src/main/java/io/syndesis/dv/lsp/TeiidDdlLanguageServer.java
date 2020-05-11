@@ -30,6 +30,8 @@ import org.eclipse.lsp4j.services.WorkspaceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.syndesis.dv.server.endpoint.MetadataService;
+
 public class TeiidDdlLanguageServer implements LanguageServer, LanguageClientAware {
 
     private static CompletionOptions DEFAULT_COMPLETION_OPTIONS = new CompletionOptions(Boolean.TRUE, Arrays.asList(".", "@", "#", "*"));
@@ -38,6 +40,7 @@ public class TeiidDdlLanguageServer implements LanguageServer, LanguageClientAwa
 
     private WorkspaceService workspaceService;
     private TeiidDdlTextDocumentService textDocumentService;
+    private MetadataService metadataService;
 
     private LanguageClient client;
 
@@ -45,6 +48,11 @@ public class TeiidDdlLanguageServer implements LanguageServer, LanguageClientAwa
         this.textDocumentService = new TeiidDdlTextDocumentService(this);
         this.workspaceService = new TeiidDdlWorkspaceService();
         LOGGER.debug("TeiidDdlLanguageServer()  doc and workspace services created");
+    }
+
+    public TeiidDdlLanguageServer(MetadataService metadataService) {
+        this();
+        this.metadataService = metadataService;
     }
 
     /**

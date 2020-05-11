@@ -40,6 +40,7 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 import org.teiid.runtime.EmbeddedConfiguration;
 
 import io.syndesis.dv.RepositoryManager;
+import io.syndesis.dv.lsp.websocket.CustomConfigurator;
 import io.syndesis.dv.lsp.websocket.TeiidDdlWebSocketEndpoint;
 import io.syndesis.dv.metadata.MetadataInstance;
 import io.syndesis.dv.metadata.internal.DefaultMetadataInstance;
@@ -51,7 +52,7 @@ import io.syndesis.dv.repository.RepositoryManagerImpl;
 
 @Configuration
 @EnableConfigurationProperties({DvConfigurationProperties.class, SpringMavenProperties.class, SSOConfigurationProperties.class})
-@ComponentScan(basePackageClasses = {RepositoryManagerImpl.class, DefaultMetadataInstance.class, SyndesisConnectionSynchronizer.class})
+@ComponentScan(basePackageClasses = {CustomConfigurator.class, RepositoryManagerImpl.class, DefaultMetadataInstance.class, SyndesisConnectionSynchronizer.class})
 @EnableAsync
 public class DvAutoConfiguration implements ApplicationListener<ContextRefreshedEvent>, AsyncConfigurer {
 
@@ -135,6 +136,11 @@ public class DvAutoConfiguration implements ApplicationListener<ContextRefreshed
         ThreadPoolTaskExecutor tpte = new ThreadPoolTaskExecutor();
         tpte.initialize();
         return tpte;
+    }
+
+    @Bean
+    public CustomConfigurator customSpringConfigurator() {
+        return new CustomConfigurator();
     }
 
     @Bean
